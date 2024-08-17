@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding : 0;
+    box-sizing: border-box;
+}
+
+.row {
+    display : flex;
+}
+
+.box {
+    border : 1px solid black;
+}
+
+body {
+    display : flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    gap : 64px;
+}
