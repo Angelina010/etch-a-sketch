@@ -23,6 +23,17 @@ function removeGrid (){
     gridContainer.removeChild(grid)
 }
 
+function updateColorListeners (newColorFunction) {
+    const boxes = document.querySelectorAll(".box")
+    boxes.forEach((box) => {
+        colorFunctions.forEach((colorFunction) => {
+            box.removeEventListener("mouseover", colorFunction);
+
+        })
+        box.addEventListener("mouseover", newColorFunction)
+    })
+}
+
 function fillBlack(e){
     e.target.style.backgroundColor = "black";
 }
@@ -30,6 +41,12 @@ function fillBlack(e){
 function fillRainbow(e){
     e.target.style.backgroundColor = getRandomRGBColor();
 }
+
+function fillWhite(e){
+    e.target.style.backgroundColor = "white";
+}
+
+const colorFunctions = [fillBlack, fillRainbow, fillWhite]
 
 function getRandomRGBColor() {
     const r = Math.floor(Math.random() * 256);
@@ -54,6 +71,8 @@ buildGrid(DEFAULT_GRID_ROWS, DEFAULT_GRID_COLS);
 const newGridButton = document.querySelector("button.newGrid");
 const rainbowButton = document.querySelector("button.rainbow");
 const blackButton = document.querySelector("button.black");
+const resetButton = document.querySelector("button.reset");
+const eraseButton = document.querySelector("button.erase");
 
 
 newGridButton.addEventListener ("click", () => {
@@ -75,27 +94,34 @@ newGridButton.addEventListener ("click", () => {
     
 })
 
-let colorBlack = true;
+let colorMode = "black";
 
 rainbowButton.addEventListener("click", () => {
-    if (colorBlack) {
-        const boxes = document.querySelectorAll(".box")
-        boxes.forEach((box) => {
-            box.removeEventListener("mouseover", fillBlack);
-            box.addEventListener("mouseover", fillRainbow)
-        })
-        colorBlack = false;
+    if (colorMode != "rainbow") {
+        updateColorListeners(fillRainbow);
+        colorMode = "rainbow";
     }
 })
 
 blackButton.addEventListener("click", () => {
-    if (!colorBlack) {
-        const boxes = document.querySelectorAll(".box")
-        boxes.forEach((box) => {
-            box.removeEventListener("mouseover", fillRainbow);
-            box.addEventListener("mouseover", fillBlack);
-        colorBlack = true;
-    })
+    if (colorMode != "black") {
+        updateColorListeners(fillBlack);
+        colorMode = "black";
     } 
 })
+
+resetButton.addEventListener("click", () => {
+    boxes = document.querySelectorAll(".box");
+    boxes.forEach((box) => {
+        box.style.backgroundColor = "white"
+    })
+})
+
+eraseButton.addEventListener("click", () => {
+    if (colorMode != "white") {
+        updateColorListeners(fillWhite);
+        colorMode = "white";
+    }
+})
+
 

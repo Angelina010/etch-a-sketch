@@ -20,3 +20,28 @@ body {
     min-height: 100vh;
     gap : 64px;
 }
+
+.buttons{
+    display: flex;
+    gap : 64px;
+}
+
+button {
+    padding : 8px 14px;
+    background-color: #cf0000;
+    color : white;
+    border-radius: 16px;
+    border : none;
+}
+
+button:hover{
+    background-color: #b10404;
+}
+
+button.color:focus {
+    background-color: #890606;
+}
+
+.newGrid {
+    margin-left : 16px;
+}
