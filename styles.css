@@ -12,13 +12,17 @@
     border : 1px solid black;
 }
 
+.box:hover {
+    background-color: lightgray;
+}
+
 body {
     display : flex;
     flex-direction : column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    gap : 64px;
+    gap : 32px;
 }
 
 .buttons{
@@ -27,7 +31,7 @@ body {
 }
 
 button {
-    padding : 8px 14px;
+    padding : 8px 16px;
     background-color: #cf0000;
     color : white;
     border-radius: 16px;
@@ -36,6 +40,7 @@ button {
 
 button:hover{
     background-color: #b10404;
+    cursor : pointer;
 }
 
 button.color:focus {

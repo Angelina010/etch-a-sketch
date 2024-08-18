@@ -9,9 +9,10 @@ function buildGrid (numRows, numCols){
         for (let j = 0; j < numCols; j++){
             const box = document.createElement("div")
             box.classList.add("box")
+            box.classList.add("box:hover")
             box.style.width = `${gridLength / numCols}px`
             box.style.height = `${gridLength / numRows}px`
-            box.addEventListener("mouseover", fillBlack)
+            box.addEventListener(drawMode, colorMap[colorMode])
             row.appendChild(box)
         }
         grid.appendChild(row)
@@ -23,15 +24,28 @@ function removeGrid (){
     gridContainer.removeChild(grid)
 }
 
-function updateColorListeners (newColorFunction) {
+function updateEventListeners (type, newColorFunction) {
     const boxes = document.querySelectorAll(".box")
     boxes.forEach((box) => {
         colorFunctions.forEach((colorFunction) => {
             box.removeEventListener("mouseover", colorFunction);
-
+            box.removeEventListener("click", colorFunction);
         })
-        box.addEventListener("mouseover", newColorFunction)
+        box.addEventListener(type, newColorFunction)
     })
+}
+
+function updateDrawMode (){
+    if (drawMode === "mouseover"){
+        updateEventListeners("click", colorMap[colorMode])
+        drawMode = "click"
+    }
+    else{
+        updateEventListeners("mouseover", colorMap[colorMode])
+        drawMode = "mouseover"
+    }
+
+    drawModeButton.textContent = drawMode === "mouseover" ? "Draw on click" : "Draw on hover";
 }
 
 function fillBlack(e){
@@ -42,11 +56,9 @@ function fillRainbow(e){
     e.target.style.backgroundColor = getRandomRGBColor();
 }
 
-function fillWhite(e){
-    e.target.style.backgroundColor = "white";
+function fillTransparent(e){
+    e.target.style.backgroundColor = "";
 }
-
-const colorFunctions = [fillBlack, fillRainbow, fillWhite]
 
 function getRandomRGBColor() {
     const r = Math.floor(Math.random() * 256);
@@ -66,14 +78,20 @@ const gridContainer = document.querySelector(".gridContainer")
 const inputRow = document.querySelector(".inputRow");
 const inputCol = document.querySelector(".inputCol");
 
-buildGrid(DEFAULT_GRID_ROWS, DEFAULT_GRID_COLS);
-
 const newGridButton = document.querySelector("button.newGrid");
 const rainbowButton = document.querySelector("button.rainbow");
 const blackButton = document.querySelector("button.black");
 const resetButton = document.querySelector("button.reset");
 const eraseButton = document.querySelector("button.erase");
+const drawModeButton = document.querySelector("button.drawMode");
 
+const colorFunctions = [fillBlack, fillRainbow, fillTransparent]
+
+let colorMode = "black";
+let colorMap = {"black" : fillBlack, "rainbow" : fillRainbow, "transparent" : fillTransparent}
+let drawMode = "mouseover";
+
+buildGrid(DEFAULT_GRID_ROWS, DEFAULT_GRID_COLS);
 
 newGridButton.addEventListener ("click", () => {
     if (inputRow.value === "" || inputCol.value === ""){
@@ -94,18 +112,16 @@ newGridButton.addEventListener ("click", () => {
     
 })
 
-let colorMode = "black";
-
 rainbowButton.addEventListener("click", () => {
     if (colorMode != "rainbow") {
-        updateColorListeners(fillRainbow);
+        updateEventListeners(drawMode, fillRainbow);
         colorMode = "rainbow";
     }
 })
 
 blackButton.addEventListener("click", () => {
     if (colorMode != "black") {
-        updateColorListeners(fillBlack);
+        updateEventListeners(drawMode, fillBlack);
         colorMode = "black";
     } 
 })
@@ -113,15 +129,19 @@ blackButton.addEventListener("click", () => {
 resetButton.addEventListener("click", () => {
     boxes = document.querySelectorAll(".box");
     boxes.forEach((box) => {
-        box.style.backgroundColor = "white"
+        box.style.backgroundColor = "transparent"
     })
 })
 
 eraseButton.addEventListener("click", () => {
-    if (colorMode != "white") {
-        updateColorListeners(fillWhite);
-        colorMode = "white";
+    if (colorMode != "transparent") {
+        updateEventListeners(drawMode, fillTransparent);
+        colorMode = "transparent";
     }
 })
+
+drawModeButton.addEventListener("click", updateDrawMode)
+
+
 
 
