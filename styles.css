@@ -43,8 +43,8 @@ button:hover{
     cursor : pointer;
 }
 
-button.color:focus {
-    background-color: #890606;
+button.selected {
+    background-color: #7d0101;
 }
 
 .newGrid {

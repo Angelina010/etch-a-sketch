@@ -48,6 +48,14 @@ function updateDrawMode (){
     drawModeButton.textContent = drawMode === "mouseover" ? "Draw on click" : "Draw on hover";
 }
 
+function setButtonAsSelected (button) {
+    const colorButtons = document.querySelectorAll("button.color")
+    colorButtons.forEach((btn) => {
+        btn.classList.remove("selected")
+    })
+    button.classList.add("selected")
+}
+
 function fillBlack(e){
     e.target.style.backgroundColor = "black";
 }
@@ -117,6 +125,7 @@ rainbowButton.addEventListener("click", () => {
         updateEventListeners(drawMode, fillRainbow);
         colorMode = "rainbow";
     }
+    setButtonAsSelected(rainbowButton)
 })
 
 blackButton.addEventListener("click", () => {
@@ -124,20 +133,24 @@ blackButton.addEventListener("click", () => {
         updateEventListeners(drawMode, fillBlack);
         colorMode = "black";
     } 
+    setButtonAsSelected(blackButton)
 })
 
-resetButton.addEventListener("click", () => {
-    boxes = document.querySelectorAll(".box");
-    boxes.forEach((box) => {
-        box.style.backgroundColor = "transparent"
-    })
-})
 
 eraseButton.addEventListener("click", () => {
     if (colorMode != "transparent") {
         updateEventListeners(drawMode, fillTransparent);
         colorMode = "transparent";
     }
+    setButtonAsSelected(eraseButton)
+    
+})
+
+resetButton.addEventListener("click", () => {
+    boxes = document.querySelectorAll(".box");
+    boxes.forEach((box) => {
+        box.style.backgroundColor = ""
+    })
 })
 
 drawModeButton.addEventListener("click", updateDrawMode)
