@@ -12,7 +12,7 @@ function buildGrid (numRows, numCols){
             box.classList.add("box:hover")
             box.style.width = `${gridLength / numCols}px`
             box.style.height = `${gridLength / numRows}px`
-            box.addEventListener(drawMode, colorMap[colorMode])
+            box.addEventListener(drawMode, fillColor)
             row.appendChild(box)
         }
         grid.appendChild(row)
@@ -24,24 +24,22 @@ function removeGrid (){
     gridContainer.removeChild(grid)
 }
 
-function updateEventListeners (type, newColorFunction) {
+function updateEventListeners (type) {
     const boxes = document.querySelectorAll(".box")
     boxes.forEach((box) => {
-        colorFunctions.forEach((colorFunction) => {
-            box.removeEventListener("mouseover", colorFunction);
-            box.removeEventListener("click", colorFunction);
-        })
-        box.addEventListener(type, newColorFunction)
+        box.removeEventListener("mouseover", fillColor);
+        box.removeEventListener("click", fillColor);
+        box.addEventListener(type, fillColor);
     })
 }
 
 function updateDrawMode (){
     if (drawMode === "mouseover"){
-        updateEventListeners("click", colorMap[colorMode])
+        updateEventListeners("click")
         drawMode = "click"
     }
     else{
-        updateEventListeners("mouseover", colorMap[colorMode])
+        updateEventListeners("mouseover")
         drawMode = "mouseover"
     }
 
@@ -56,23 +54,26 @@ function setButtonAsSelected (button) {
     button.classList.add("selected")
 }
 
-function fillBlack(e){
-    e.target.style.backgroundColor = "black";
-}
-
-function fillRainbow(e){
-    e.target.style.backgroundColor = getRandomRGBColor();
-}
-
-function fillTransparent(e){
-    e.target.style.backgroundColor = "";
-}
 
 function getRandomRGBColor() {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
     const b = Math.floor(Math.random() * 256);
     return `rgb(${r}, ${g}, ${b})`;
+}
+
+function fillColor(e){
+    switch (colorMode){
+        case "black" :
+            e.target.style.backgroundColor = "black";
+            break
+        case "rainbow":
+            e.target.style.backgroundColor = getRandomRGBColor();
+            break
+        case "transparent":
+            e.target.style.backgroundColor = "";
+            break
+    }
 }
 
 
@@ -93,10 +94,7 @@ const resetButton = document.querySelector("button.reset");
 const eraseButton = document.querySelector("button.erase");
 const drawModeButton = document.querySelector("button.drawMode");
 
-const colorFunctions = [fillBlack, fillRainbow, fillTransparent]
-
 let colorMode = "black";
-let colorMap = {"black" : fillBlack, "rainbow" : fillRainbow, "transparent" : fillTransparent}
 let drawMode = "mouseover";
 
 buildGrid(DEFAULT_GRID_ROWS, DEFAULT_GRID_COLS);
@@ -121,27 +119,18 @@ newGridButton.addEventListener ("click", () => {
 })
 
 rainbowButton.addEventListener("click", () => {
-    if (colorMode != "rainbow") {
-        updateEventListeners(drawMode, fillRainbow);
-        colorMode = "rainbow";
-    }
+    colorMode = "rainbow";
     setButtonAsSelected(rainbowButton)
 })
 
 blackButton.addEventListener("click", () => {
-    if (colorMode != "black") {
-        updateEventListeners(drawMode, fillBlack);
-        colorMode = "black";
-    } 
+    colorMode = "black";
     setButtonAsSelected(blackButton)
 })
 
 
 eraseButton.addEventListener("click", () => {
-    if (colorMode != "transparent") {
-        updateEventListeners(drawMode, fillTransparent);
-        colorMode = "transparent";
-    }
+    colorMode = "transparent";
     setButtonAsSelected(eraseButton)
     
 })
