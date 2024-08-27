@@ -51,8 +51,10 @@ function setButtonAsSelected (button) {
     colorButtons.forEach((btn) => {
         btn.classList.remove("selected");
     })
+    colorPicker.classList.remove("selected");
     button.classList.add("selected");
 }
+
 
 
 function getRandomRGBColor() {
@@ -73,6 +75,11 @@ function fillColor(e){
         case "transparent":
             e.target.style.backgroundColor = "";
             break
+
+        default:
+            //Custom color
+            e.target.style.backgroundColor = colorMode;
+            break;
     }
 }
 
@@ -93,6 +100,7 @@ const blackButton = document.querySelector("button.black");
 const resetButton = document.querySelector("button.reset");
 const eraseButton = document.querySelector("button.erase");
 const drawModeButton = document.querySelector("button.drawMode");
+const colorPicker = document.querySelector(".colorPicker")
 
 setButtonAsSelected(blackButton);
 
@@ -146,3 +154,8 @@ resetButton.addEventListener("click", () => {
 })
 
 drawModeButton.addEventListener("click", updateDrawMode);
+
+colorPicker.addEventListener("input", () => {
+    colorMode = colorPicker.value;
+    setButtonAsSelected(colorPicker);
+})

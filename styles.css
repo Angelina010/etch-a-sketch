@@ -9,7 +9,7 @@
 }
 
 .box {
-    border : 1px solid black;
+    border : 0.5px solid black;
 }
 
 .box:hover {
@@ -27,7 +27,10 @@ body {
 
 .buttons{
     display: flex;
-    gap : 64px;
+    gap : 48px;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15%
 }
 
 button {
@@ -36,6 +39,7 @@ button {
     color : white;
     border-radius: 16px;
     border : none;
+    width: 120px;
 }
 
 button:hover{
@@ -49,4 +53,39 @@ button.selected {
 
 .newGrid {
     margin-left : 16px;
+}
+
+.container {
+    display : flex;
+    gap: 84px;
+}
+
+.right {
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+.colorPicker {
+    appearance: none;
+    width: 100px;
+    height: 100px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.colorPicker.selected {
+    border: 2px solid #7d0101;
+}
+
+.colorPicker::-webkit-color-swatch{
+    border-radius: 50%;
+    border: none;
+}
+
+.colorPicker::--moz-color-swatch{
+    border-radius: 50%;
+    border: none;
 }
