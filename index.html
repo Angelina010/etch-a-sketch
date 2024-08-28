@@ -13,14 +13,20 @@
             <button class = "black color">Black</button>
             <button class = "rainbow color">Rainbow</button>
             <button class = "erase color">Erase</button>
-            <button class = "drawMode">Draw on click</button>
+            <button class = "drawMode">Draw on hover</button>
             <button class = "reset">Reset</button>
         </div>
      <div class = "right">
         <h1>Etch-A-Sketch</h1>
-         <div class = "gridSize">
-             <input size = 1 class = "inputRow"> x <input size = 1 class = "inputCol">
-             <button class = "newGrid">New grid</button>
+         <div class = "gridCustomization">
+            <div class = "gridSize">
+                 <input size = 1 class = "inputRow"> x <input size = 1 class = "inputCol">
+                 <button class = "newGrid">New grid</button>
+            </div>
+             <div class = "checkbox">
+                <input type="checkbox" name="Grid lines" id="grid-lines" checked>
+                <label for="grid-lines">Grid lines</label>
+             </div>
          </div>
          <div class = "gridContainer"></div>
      </div>

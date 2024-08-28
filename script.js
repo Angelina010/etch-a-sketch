@@ -9,6 +9,7 @@ function buildGrid (numRows, numCols){
         for (let j = 0; j < numCols; j++){
             const box = document.createElement("div");
             box.classList.add("box");
+            box.classList.add("box-border")
             box.classList.add("box:hover");
             box.style.width = `${gridLength / numCols}px`;
             box.style.height = `${gridLength / numRows}px`;
@@ -100,12 +101,13 @@ const blackButton = document.querySelector("button.black");
 const resetButton = document.querySelector("button.reset");
 const eraseButton = document.querySelector("button.erase");
 const drawModeButton = document.querySelector("button.drawMode");
-const colorPicker = document.querySelector(".colorPicker")
+const colorPicker = document.querySelector(".colorPicker");
+const gridLinesCheckbox = document.querySelector("#grid-lines");
 
 setButtonAsSelected(blackButton);
 
 let colorMode = "black";
-let drawMode = "mouseover";
+let drawMode = "click";
 
 buildGrid(DEFAULT_GRID_ROWS, DEFAULT_GRID_COLS);
 
@@ -158,4 +160,11 @@ drawModeButton.addEventListener("click", updateDrawMode);
 colorPicker.addEventListener("input", () => {
     colorMode = colorPicker.value;
     setButtonAsSelected(colorPicker);
+})
+
+gridLinesCheckbox.addEventListener("change", () => {
+    boxes = document.querySelectorAll(".box");
+    boxes.forEach((box) => {
+        box.classList.toggle("box-border")
+    })
 })
