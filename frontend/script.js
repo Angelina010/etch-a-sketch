@@ -149,7 +149,8 @@ async function generatePixelArtFromPrompt() {
   generateAIButton.disabled = true;
 
   try {
-    const API_BASE = "https://YOUR-VERCEL-PROJECT.vercel.app";
+    const API_BASE = "https://etch-a-sketch-ten-kohl.vercel.app";
+
 
     const res = await fetch(`${API_BASE}/api/pixel-art`, {
     method: "POST",
