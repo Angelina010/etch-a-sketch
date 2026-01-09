@@ -10,7 +10,6 @@ function buildGrid (numRows, numCols){
             const box = document.createElement("div");
             box.classList.add("box");
             box.classList.add("box-border")
-            box.classList.add("box:hover");
             box.style.width = `${gridLength / numCols}px`;
             box.style.height = `${gridLength / numRows}px`;
             box.addEventListener(drawMode, fillColor);
@@ -103,6 +102,82 @@ const eraseButton = document.querySelector("button.erase");
 const drawModeButton = document.querySelector("button.drawMode");
 const colorPicker = document.querySelector(".colorPicker");
 const gridLinesCheckbox = document.querySelector("#grid-lines");
+
+const aiPrompt = document.querySelector(".aiPrompt");
+const generateAIButton = document.querySelector("button.generateAI");
+const aiStatus = document.querySelector(".aiStatus");
+
+function setAIStatus(msg) {
+  aiStatus.textContent = msg;
+}
+
+
+function applyPixelsToGrid(pixels, rows, cols) {
+  // Ensure the grid is the right size
+  const currentBoxes = document.querySelectorAll(".box");
+  const expectedCount = rows * cols;
+
+  if (currentBoxes.length !== expectedCount) {
+    // rebuild grid to match AI output
+    removeGrid();
+    buildGrid(rows, cols);
+  }
+
+  const boxes = document.querySelectorAll(".box");
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const idx = r * cols + c;
+      const color = pixels[r][c]; // string like "#RRGGBB" or null
+      boxes[idx].style.backgroundColor = color ? color : "";
+    }
+  }
+}
+
+
+async function generatePixelArtFromPrompt() {
+  const prompt = aiPrompt.value.trim();
+  if (!prompt) {
+    setAIStatus("Type a prompt first.");
+    return;
+  }
+
+  // Use the user's current grid size as a target
+  const targetRows = Math.min(Number(inputRow.value || DEFAULT_GRID_ROWS), MAX_GRID_SIZE);
+  const targetCols = Math.min(Number(inputCol.value || DEFAULT_GRID_COLS), MAX_GRID_SIZE);
+
+  setAIStatus("Generating...");
+  generateAIButton.disabled = true;
+
+  try {
+    const API_BASE = "https://YOUR-VERCEL-PROJECT.vercel.app";
+
+    const res = await fetch(`${API_BASE}/api/pixel-art`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt, rows: targetRows, cols: targetCols })
+    });
+
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    // expected: { rows, cols, pixels }
+    applyPixelsToGrid(data.pixels, data.rows, data.cols);
+    setAIStatus("Done.");
+  } catch (err) {
+    console.error(err);
+    setAIStatus("Error generating. Check console / server logs.");
+  } finally {
+    generateAIButton.disabled = false;
+  }
+}
+
+generateAIButton.addEventListener("click", generatePixelArtFromPrompt);
+
+
 
 setButtonAsSelected(blackButton);
 

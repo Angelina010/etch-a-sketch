@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+h1{
+    text-align: center;
+}
+
 .row {
     display : flex;
 }
@@ -12,13 +16,14 @@
     border : 0.5px solid black;
 }
 
+.box:hover {
+    background-color: lightgray;
+}
+
 .gridContainer {
     border : 0.5px solid black;
 }
 
-.box:hover {
-    background-color: lightgray;
-}
 
 body {
     display : flex;
@@ -66,7 +71,7 @@ button.selected {
 
 .right {
     display : flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 32px;
 }
@@ -100,3 +105,41 @@ button.selected {
     align-items: center;
     gap: 16px;
 }
+
+.gridPanel {
+    display : flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+.aiPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aiPrompt {
+  width: 160px;
+  resize: vertical;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+}
+
+.aiStatus {
+  font-size: 12px;
+  min-height: 16px;
+}
+
+.aiSide {
+  width: 180px;
+  padding-top: 8px;
+}
+
+.aiSide h3 {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
