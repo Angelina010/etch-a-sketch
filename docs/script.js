@@ -106,9 +106,16 @@ const gridLinesCheckbox = document.querySelector("#grid-lines");
 const aiPrompt = document.querySelector(".aiPrompt");
 const generateAIButton = document.querySelector("button.generateAI");
 const aiStatus = document.querySelector(".aiStatus");
+const aiProgress = document.querySelector(".aiProgress");
+
 
 function setAIStatus(msg) {
   aiStatus.textContent = msg;
+}
+
+function setGenerating(isGenerating) {
+  generateAIButton.disabled = isGenerating;
+  aiProgress.hidden = !isGenerating;
 }
 
 
@@ -133,7 +140,6 @@ function applyPixelsToGrid(pixels, rows, cols) {
   }
 }
 
-
 async function generatePixelArtFromPrompt() {
   const prompt = aiPrompt.value.trim();
   if (!prompt) {
@@ -141,23 +147,20 @@ async function generatePixelArtFromPrompt() {
     return;
   }
 
-  // Use the user's current grid size as a target
   const targetRows = Math.min(Number(inputRow.value || DEFAULT_GRID_ROWS), MAX_GRID_SIZE);
   const targetCols = Math.min(Number(inputCol.value || DEFAULT_GRID_COLS), MAX_GRID_SIZE);
 
   setAIStatus("Generating...");
-  generateAIButton.disabled = true;
+  setGenerating(true);
 
   try {
-    const API_BASE = "https://etch-a-sketch-ten-kohl.vercel.app";
-
+    const API_BASE = "https://etch-a-sketch-ten-kohl.vercel.app"; // <-- your real Vercel URL
 
     const res = await fetch(`${API_BASE}/api/pixel-art`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, rows: targetRows, cols: targetCols })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, rows: targetRows, cols: targetCols }),
     });
-
 
     if (!res.ok) {
       const text = await res.text();
@@ -165,16 +168,16 @@ async function generatePixelArtFromPrompt() {
     }
 
     const data = await res.json();
-    // expected: { rows, cols, pixels }
     applyPixelsToGrid(data.pixels, data.rows, data.cols);
     setAIStatus("Done.");
   } catch (err) {
     console.error(err);
     setAIStatus("Error generating. Check console / server logs.");
   } finally {
-    generateAIButton.disabled = false;
+    setGenerating(false);
   }
 }
+
 
 generateAIButton.addEventListener("click", generatePixelArtFromPrompt);
 

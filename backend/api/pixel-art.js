@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   // ---- CORS (so GitHub Pages can call Vercel) ----
-  res.setHeader("Access-Control-Allow-Origin", "*"); // or restrict to your GH Pages domain
+  res.setHeader("Access-Control-Allow-Origin", "https://angelina010.github.io");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 

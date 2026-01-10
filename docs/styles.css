@@ -51,6 +51,10 @@ button {
     width: 120px;
 }
 
+.generateAI {
+    width: 160px;
+}
+
 button:hover{
     background-color: #b10404;
     cursor : pointer;
@@ -142,4 +146,33 @@ button.selected {
   margin-bottom: 8px;
   font-size: 16px;
 }
+
+.aiProgress {
+  width: 180px;
+  height: 10px;
+  border-radius: 999px;
+  background: #eee;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.aiProgressBar {
+  height: 100%;
+  width: 40%;
+  border-radius: 999px;
+  background: #cf0000;
+  animation: aiIndeterminate 1s ease-in-out infinite;
+}
+
+@keyframes aiIndeterminate {
+  0%   { transform: translateX(-120%); }
+  50%  { transform: translateX(80%); }
+  100% { transform: translateX(220%); }
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 
