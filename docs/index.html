@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-A-Sketch</title>
+    <link rel = "stylesheet" href = "styles.css">
+</head>
+<body>
+   <div class = "container">
+        <div class = "buttons">
+            <input type="color" class="colorPicker">
+            <button class = "black color">Black</button>
+            <button class = "rainbow color">Rainbow</button>
+            <button class = "erase color">Erase</button>
+            <button class = "drawMode">Draw on hover</button>
+            <button class = "reset">Reset</button>
+        </div>
+     <div class = "right">
+        <div class = "gridPanel">
+            <h1>Etch-A-Sketch</h1>
+            <div class = "gridCustomization">
+                <div class = "gridSize">
+                    <input size = 1 class = "inputRow"> x <input size = 1 class = "inputCol">
+                    <button class = "newGrid">New grid</button>
+                </div>
+                <div class = "checkbox">
+                    <input type="checkbox" name="Grid lines" id="grid-lines" checked>
+                    <label for="grid-lines">Grid lines</label>
+                </div>
+            </div>
+            <div class = "gridContainer"></div>
+         </div>
+        <div class="aiPanel aiSide">
+            <h3>AI Draw</h3>
+            <textarea
+            class="aiPrompt"
+            rows="6"
+            placeholder="Describe pixel art..."
+            ></textarea>
+            <button class="generateAI">Generate Pixel Art</button>
+            <div class="aiStatus" aria-live="polite"></div>
+        </div>
+     </div>
+   </div>
+    <script src = "script.js"></script>
+</body>
+</html>
