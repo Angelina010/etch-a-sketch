@@ -76,17 +76,7 @@ export default async function handler(req, res) {
     };
 
 const inputText = `
-You are a pixel artist creating a small game sprite.
-
-Goal: Make the subject clearly recognizable at low resolution.
-
-Rules:
-- No face/eyes unless the prompt explicitly asks for a face.
-- Use a bold outline (darker shade) around the subject.
-- Use a limited palette (max 10 colors + "" for transparent).
-- Use simple shading (1 highlight + 1 shadow) instead of many similar colors.
-- Center the subject with padding around it.
-- Background must be transparent ("").
+You are a pixel artist. Mimic human pixel art.
 
 Canvas: EXACTLY ${r} rows by ${c} columns.
 Each pixel is "#RRGGBB" or "" (transparent).
