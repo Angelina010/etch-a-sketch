@@ -1,8 +1,26 @@
 export default async function handler(req, res) {
   // ---- CORS (so GitHub Pages can call Vercel) ----
-  res.setHeader("Access-Control-Allow-Origin", "https://angelina010.github.io");
+  const allowedOrigins = new Set([
+  "https://angelina010.github.io",
+  "http://127.0.0.1:5500",
+  "http://localhost:5500",
+  "http://127.0.0.1:3000",
+  "http://localhost:3000",
+]);
+
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else {
+    // optional: keep it locked down instead of "*"
+    res.setHeader("Access-Control-Allow-Origin", "https://angelina010.github.io");
+  }
+
+  res.setHeader("Vary", "Origin");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
@@ -57,19 +75,23 @@ export default async function handler(req, res) {
       }
     };
 
-    const inputText = `
-Generate pixel art for a grid that is EXACTLY ${r} rows by ${c} columns.
+const inputText = `
+You are a pixel artist creating a small game sprite.
 
-Return ONLY JSON matching the schema.
-- rows must be ${r}
-- cols must be ${c}
-- pixels must be an array of length ${r}
-- each row must be an array of length ${c}
-- each cell is "#RRGGBB" or "" (empty string) for transparent
+Goal: Make the subject clearly recognizable at low resolution.
 
-Make it centered and readable at low resolution (bold shapes, minimal shading).
+Rules:
+- No face/eyes unless the prompt explicitly asks for a face.
+- Use a bold outline (darker shade) around the subject.
+- Use a limited palette (max 10 colors + "" for transparent).
+- Use simple shading (1 highlight + 1 shadow) instead of many similar colors.
+- Center the subject with padding around it.
+- Background must be transparent ("").
 
-Prompt: ${prompt}
+Canvas: EXACTLY ${r} rows by ${c} columns.
+Each pixel is "#RRGGBB" or "" (transparent).
+
+Subject: ${prompt}
 `.trim();
 
     const response = await fetch("https://api.openai.com/v1/responses", {
