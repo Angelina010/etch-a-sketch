@@ -99,6 +99,8 @@ const rainbowButton = document.querySelector("button.rainbow");
 const blackButton = document.querySelector("button.black");
 const resetButton = document.querySelector("button.reset");
 const eraseButton = document.querySelector("button.erase");
+const saveButton = document.querySelector("button.save");
+
 const drawModeButton = document.querySelector("button.drawMode");
 const colorPicker = document.querySelector(".colorPicker");
 const gridLinesCheckbox = document.querySelector("#grid-lines");
@@ -117,6 +119,64 @@ function setGenerating(isGenerating) {
   generateAIButton.disabled = isGenerating;
   aiProgress.hidden = !isGenerating;
 }
+
+
+function rgbStringToHex(rgb) {
+  // Handles "rgb(r, g, b)" or "rgba(r, g, b, a)"
+  const match = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+  if (!match) return null;
+
+  const r = Number(match[1]).toString(16).padStart(2, "0");
+  const g = Number(match[2]).toString(16).padStart(2, "0");
+  const b = Number(match[3]).toString(16).padStart(2, "0");
+  return `#${r}${g}${b}`.toUpperCase();
+}
+
+function saveGridAsPNG() {
+  const grid = document.querySelector(".grid");
+  if (!grid) return;
+
+  const rows = grid.children.length;               // number of .row divs
+  const cols = grid.children[0]?.children.length;  // number of .box in first row
+  if (!rows || !cols) return;
+
+  // Make each “cell” bigger in the output so it looks crisp
+  const CELL_SIZE = 20; // px per grid cell in the exported image
+  const canvas = document.createElement("canvas");
+  canvas.width = cols * CELL_SIZE;
+  canvas.height = rows * CELL_SIZE;
+
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+
+  // Paint pixels from DOM to canvas
+  for (let r = 0; r < rows; r++) {
+    const row = grid.children[r];
+    for (let c = 0; c < cols; c++) {
+      const box = row.children[c];
+
+      // Use inline style first (what you set), fallback to computed style
+      let color = box.style.backgroundColor;
+      if (!color) color = getComputedStyle(box).backgroundColor;
+
+      // Transparent/empty
+      if (!color || color === "transparent" || color === "rgba(0, 0, 0, 0)") {
+        continue;
+      }
+
+      ctx.fillStyle = color;
+      ctx.fillRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    }
+  }
+
+  // Download
+  const a = document.createElement("a");
+  a.download = `etch-a-sketch-${rows}x${cols}.png`;
+  a.href = canvas.toDataURL("image/png");
+  a.click();
+}
+
+saveButton.addEventListener("click", saveGridAsPNG);
 
 
 function applyPixelsToGrid(pixels, rows, cols) {
